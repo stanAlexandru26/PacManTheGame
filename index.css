@@ -36,14 +36,7 @@ html, body {
     border: none;
 }
 
-.ghost {
-    background-color: rgb(196, 0, 0);
-    border: none;
-}
-.scared-ghost {
-    background-color: aquamarine;
-    border: none;
-}
+
 .blinky {
     background-color: red;
     border: none;
@@ -61,5 +54,10 @@ html, body {
 
 .clyde {
     background-color: orange;
+    border: none;
+}
+
+.scared-ghost {
+    background-color: aquamarine;
     border: none;
 }
