@@ -63,25 +63,105 @@ function createBoard() {
 }
 
 createBoard()
-
+////PacMan Control 
 let pacmanCurrentIndex = 490
 
 squares[pacmanCurrentIndex].classList.add("pacman")
 
-class Ghost {
-    constructor(startIndex,speed,){
+document.addEventListener('keyup', movePacman)
+
+function movePacman(event) {
+
+    squares[pacmanCurrentIndex].classList.remove("pacman")
+
+    switch(event.key) {
+        case "ArrowDown":
+        if (
+            !squares[pacmanCurrentIndex + width].classList.contains('ghost-lair') &&
+            !squares[pacmanCurrentIndex + width].classList.contains('wall') &&
+            pacmanCurrentIndex + width < width * width
+            ) 
+            pacmanCurrentIndex += width
+        break;
+
+        case "ArrowUp":
+
+        if (!squares[pacmanCurrentIndex - width].classList.contains('ghost-lair') &&
+            !squares[pacmanCurrentIndex - width].classList.contains('wall') &&
+            pacmanCurrentIndex - width >=0) pacmanCurrentIndex -= width
+        break;
+
+        case "ArrowLeft": 
+        if( !squares[pacmanCurrentIndex - 1].classList.contains('ghost-lair') &&
+            !squares[pacmanCurrentIndex - 1 ].classList.contains('wall') &&
+            pacmanCurrentIndex % width !==0) pacmanCurrentIndex -=1
+            if (pacmanCurrentIndex === 364) {
+                pacmanCurrentIndex = 391
+            }
         
+        break;
+
+        case "ArrowRight":
+        if(!squares[pacmanCurrentIndex + 1].classList.contains('ghost-lair') &&
+            !squares[pacmanCurrentIndex + 1].classList.contains('wall') &&
+            pacmanCurrentIndex % width < width -1) pacmanCurrentIndex +=1
+            if(pacmanCurrentIndex === 391){
+                pacmanCurrentIndex =364
+            }
+        break;
+        
+    }
+    squares[pacmanCurrentIndex].classList.add("pacman")
+
+};
+///
+///Ghost creation 
+class Ghost {
+    constructor(className,startIndex,speed,){
+        this.className = className
         this.startIndex = startIndex
         this.speed = speed
+        this.currentIndex = startIndex
+
     }
 }
 const ghosts = [
-    new Ghost( 348, 250),
-    new Ghost( 376, 400),
-    new Ghost( 351, 300),
-    new Ghost( 379, 500)
+    new Ghost('blinky', 348, 250),
+    new Ghost('pinky', 376, 400),
+    new Ghost('inky', 351, 300),
+    new Ghost('clyde', 379, 500)
 ]
 
 ghosts.forEach(ghost => {
+    squares[ghost.startIndex].classList.add(ghost.className)
     squares[ghost.startIndex].classList.add('ghost')
 })
+
+///
+///Ghost Navigation
+ghosts.forEach(ghost => moveGhost(ghost))
+
+function moveGhost(ghost) {
+    const directions = [-1, +1, -width, +width]
+    let direction = directions[Math.floor(Math.random() * directions.length)]
+    
+    ghost.timerId = setInterval(function() {
+
+        if (
+            !squares[ghost.currentIndex + direction].classList.contains('wall') &&
+            !squares[ghost.currentIndex + direction].classList.contains('ghost')
+        ) {
+
+        squares[ghost.currentIndex].classList.remove(ghost.className)
+        squares[ghost.currentIndex].classList.remove('ghost', 'scared-ghost')
+
+        ghost.currentIndex += direction
+
+        squares[ghost.currentIndex].classList.add(ghost.className)  
+        squares[ghost.currentIndex].classList.add('ghost')  
+        } else direction = directions[Math.floor(Math.random() * directions.length)]
+        
+
+    }, ghost.speed )
+    
+}
