@@ -15,3 +15,28 @@ html, body {
     width: 15px;
     height: 15px;
 }
+.coin{
+    background-color: rgb(216, 112, 147);
+    border: 5px solid white;
+    box-sizing: border-box;
+}
+
+.wall {
+    background-color: blue;
+}
+
+.power-up {
+    background-color: palevioletred;
+    border-radius: 7.5px;
+}
+
+.pacman {
+    background-color: yellow;
+    border-radius: 7.5px;
+    border: none;
+}
+
+.ghost {
+    background-color: red;
+    border: none;
+}
