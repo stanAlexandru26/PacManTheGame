@@ -8,7 +8,7 @@ let squares = []
     //28 * 28 = 784
     // 0 - coin
     // 1 - wall
-    // 2 - ghost-base
+    // 2 - ghost-lair
     // 3 - power-up
     // 4 - empty
 
@@ -111,9 +111,14 @@ function movePacman(event) {
         break;
         
     }
-    squares[pacmanCurrentIndex].classList.add("pacman")
+    
+    eatCoin();
+    eatPowerUp();
+    checkForWin();
+    squares[pacmanCurrentIndex].classList.add("pacman");
 
 };
+
 ///
 ///Ghost creation 
 class Ghost {
@@ -122,7 +127,8 @@ class Ghost {
         this.startIndex = startIndex
         this.speed = speed
         this.currentIndex = startIndex
-
+        this.isScared = false
+        this.timerId = NaN
     }
 }
 const ghosts = [
@@ -160,8 +166,53 @@ function moveGhost(ghost) {
         squares[ghost.currentIndex].classList.add(ghost.className)  
         squares[ghost.currentIndex].classList.add('ghost')  
         } else direction = directions[Math.floor(Math.random() * directions.length)]
+
+        if (ghost.isScared) {
+            squares[ghost.currentIndex].classList.add('scared-ghost')
+        }
+        if(ghost.isScared && squares[ghost.currentIndex].classList.contains("pacman")){
+            squares[ghost.currentIndex].classList.remove(ghost.className, 'ghost', 'scared-ghost')
+            ghost.currentIndex = ghost.startIndex
+            score += 100
+            scoreDisplay.innerHTML = score
+            squares[ghost.currentIndex].classList.add(ghost.className, 'ghost')
+        }
         
 
     }, ghost.speed )
     
 }
+
+
+////Misc functions
+
+function eatCoin() {
+    if (squares[pacmanCurrentIndex].classList.contains("coin")){
+        squares[pacmanCurrentIndex].classList.remove("coin")
+        score ++
+        scoreDisplay.innerHTML = score
+    }
+}
+
+function eatPowerUp() {
+    
+    if (squares[pacmanCurrentIndex].classList.contains('power-up')) {
+    score +=10
+    scoreDisplay.innerHTML = score
+    squares[pacmanCurrentIndex].classList.remove('power-up')
+    
+    ghosts.forEach(ghost => ghost.isScared = true)
+         
+    setTimeout(unScareGhosts, 10000)   
+    }
+}
+function checkForWin() {
+    if (score === 274) {
+        
+        ghosts.forEach(ghost => clearInterval(ghost.timerId))
+        document.removeEventListener('keyup', control)
+        scoreDisplay.innerHTML = 'You WON!'
+    }
+}
+
+////
