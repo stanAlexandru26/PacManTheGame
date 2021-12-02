@@ -63,3 +63,25 @@ function createBoard() {
 }
 
 createBoard()
+
+let pacmanCurrentIndex = 490
+
+squares[pacmanCurrentIndex].classList.add("pacman")
+
+class Ghost {
+    constructor(startIndex,speed,){
+        
+        this.startIndex = startIndex
+        this.speed = speed
+    }
+}
+const ghosts = [
+    new Ghost( 348, 250),
+    new Ghost( 376, 400),
+    new Ghost( 351, 300),
+    new Ghost( 379, 500)
+]
+
+ghosts.forEach(ghost => {
+    squares[ghost.startIndex].classList.add('ghost')
+})

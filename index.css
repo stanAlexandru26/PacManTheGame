@@ -37,6 +37,6 @@ html, body {
 }
 
 .ghost {
-    background-color: red;
+    background-color: rgb(196, 0, 0);
     border: none;
 }
